@@ -1,0 +1,1 @@
+To setup the data in your local neo4j instance simply run 'ruby into_neo_db.rb' in the setup folder
