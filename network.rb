@@ -27,5 +27,6 @@ end
 
 get '/influenced' do
   data = influenced_matrix.inject({}) {|h,i| t = h; i.each {|n| t[n] ||= {}; t = t[n]}; h}
+  puts data
 	with_children(data).to_json
 end

@@ -50,7 +50,7 @@ function update() {
 
   // Update the nodes…
   node = vis.selectAll("circle.node")
-      .data(nodes, function(d) { return d.id; })
+      .data(nodes, function(d) { return d.name; })
       .style("fill", color);
 
   node.transition()
@@ -84,8 +84,7 @@ function tick() {
 }
 
 function color(d, i) {
-  return ['red', 'yellow', 'blue'][i % 3];
-  //return d._children ? "#3182bd" : d.children ? "#c6dbef" : colorscale(d.size);
+  return d._children ? "#3182bd" : d.children ? "#c6dbef" : colorscale(d.size);
 }
 
 // Toggle children on click.
