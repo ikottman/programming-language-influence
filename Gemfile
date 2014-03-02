@@ -1,14 +1,13 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'sinatra'
-gem 'neography'
-gem 'haml'
-gem 'json'
-gem 'twitter'
+gem 'sinatra', '~> 1.4'
+gem 'neography', '~> 1.3'
+gem 'haml', '~> 4.0'
+gem 'json', '~> 1.8'
 
 
 group :test do
-  gem 'rspec'
-  gem 'rack-test'
-  gem 'net-http-spy' 
+  gem 'rspec', '~> 2.14'
+  gem 'rack-test', '~> 0.6'
+  gem 'net-http-spy', '~> 0.2'
 end
