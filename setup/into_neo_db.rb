@@ -1,37 +1,30 @@
 require 'rubygems'
 require 'neography'
 require 'csv'
-
-def create_node(row)
-	Neography::Node.create_unique(:pl, :id, row[0], "id" => row[0], "description" => row[1], "influenced" => row[2],
-	 "influenced by" => row[3], "thumbnail" => row[4], "full picture" => row[5], :name => row[6])
-end
+require 'pry'
+require 'benchmark'
+require 'pp'
 
 def influences(first, second)
-	if first == nil
-		puts 'hello'
-	else
 		first.outgoing(:influenced) << second
-	end
 end
 
-
-#this creates the nodes
-begin
-	CSV.foreach("curated_programming_languages.csv") do |row|
-	  #puts row[0]
-	  create_node(row)		
-	end
+def create_graph
+	neo = Neography::Rest.new
+	languages = CSV.read("curated_programming_languages.csv")
+	#create a list of commands to create each node and execute them all at once
+	commands = languages.map{ |each| [:create_unique_node, :pl, :id, each[0], {"id" => each[0], "description" => each[1], "num_repositories" => each[2]}]}
+	return neo.batch *commands
 end
 
 #This creates the relationships between each node
 #id	description	influenced	influenced by	thumbnail	full picture	name
-begin
+def create_relationships
 	CSV.foreach("curated_programming_languages.csv") do |row|				
-		if row[2] != 'NULL'
-		  #puts "first id: #{row[0]}"
+		if row[3] != 'NULL'
+			#puts "first id: #{row[0]}"
 			first = Neography::Node.find(:pl, :id, row[0])
-			for id in row[2].split('|')
+			for id in row[3].split('|')
 				#puts "second id: #{id}"
 				second = Neography::Node.find(:pl, :id, id)
 				if !(second.nil? || second.empty?)
@@ -40,4 +33,11 @@ begin
 			end
 		end
 	end
+end
+
+
+#this creates the nodes
+begin
+		puts Benchmark.measure { create_graph }
+		puts Benchmark.measure { create_relationships } 
 end
