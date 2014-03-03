@@ -39,6 +39,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86-mingw32
 
 DEPENDENCIES
   haml (~> 4.0)

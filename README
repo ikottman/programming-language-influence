@@ -1,1 +1,6 @@
-To setup the data in your local neo4j instance simply run 'ruby into_neo_db.rb' in the setup folder
+0) Have a local Neo4j instance running
+1) Run 'bundle install'
+2) Run 'ruby ./setup/setup.rb' (this step only needs to be done once to fill your local Neo4j instance with data)
+3) Run 'rackup'
+4) Access 'http://localhost:9292/index.html' in your favorite browser
+5) To look at the data that is being graphed you can go to 'http://localhost:9292/influenced'
