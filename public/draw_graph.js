@@ -6,11 +6,15 @@ $.ajax("/influenced", {
     success:function (res) {
     var arrayLength = res.length;
 	for (var i = 0; i < arrayLength; i++) {
-		//Do something
+		current_node = res[i][0]['data']['name'];
+		graph.addNode(current_node);
 		influenced = res[i][0]['data']['influenced'].split("|");
-		for (var j = 0; j < influenced.length; j++)
+		if (influenced != "NULL")
 		{
-			graph.addLink(res[i][0]['data']['name'], influenced[j]);
+			for (var j = 0; j < influenced.length; j++)
+			{
+				graph.addLink(current_node, influenced[j]);
+			}
 		}
 	}
     }
