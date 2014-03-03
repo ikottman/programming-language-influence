@@ -11,7 +11,7 @@ def create_graph
 	neo = Neography::Rest.new
 	languages = CSV.read("curated_programming_languages.csv")
 	#create a list of commands to create each node and execute them all at once
-	commands = languages.map{ |each| [:create_unique_node, :pl, :id, each[0], {"name" => each[0], "description" => each[1], "num_repositories" => each[2]}]}
+	commands = languages.map{ |each| [:create_unique_node, :pl, :id, each[0], {"name" => each[0], "description" => each[1], "num_repositories" => each[2], "influenced" => each[3]}]}
 	return neo.batch *commands
 end
 
