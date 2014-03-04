@@ -9,7 +9,7 @@ end
 
 def create_graph
 	neo = Neography::Rest.new
-	languages = CSV.read("curated_programming_languages.csv")
+	languages = CSV.read("./setup/curated_programming_languages.csv")
 	#create a list of commands to create each node and execute them all at once
 	commands = languages.map{ |each| [:create_unique_node, :pl, :id, each[0],{
 		:name => each[0],
@@ -26,7 +26,7 @@ end
 #This creates the relationships between each node
 def create_relationships
 	count = 0
-	CSV.foreach("curated_programming_languages.csv") do |row|				
+	CSV.foreach("./setup/curated_programming_languages.csv") do |row|				
 		if row[3] != 'NULL'
 			first = Neography::Node.find(:pl, :id, row[0])
 			for id in row[3].split('|')
