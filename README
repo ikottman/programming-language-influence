@@ -4,3 +4,5 @@
 3) Run 'bundle exec rackup'
 4) Access 'http://localhost:9292/index.html' in your favorite browser
 5) To look at the data that is being graphed you can go to 'http://localhost:9292/influenced'
+
+![Example graph](/example.png)
