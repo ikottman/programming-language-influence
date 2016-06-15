@@ -2,3 +2,4 @@
 neo4j/
 .bundle/
 vendor/
+.idea/

@@ -1,58 +1,53 @@
 require 'rubygems'
-require 'neography'
 require 'csv'
-require 'pp'
+require 'json'
+require 'neo4j-core'
 
-def influences(first, second)
-		first.outgoing(:influenced) << second
-end
-
+# create nodes for each programming language
 def create_graph
-	neo = Neography::Rest.new
-	languages = CSV.read("./setup/programming_languages.csv")
-	#create a list of commands to create each node and execute them all at once
-	commands = languages.map{ |each| [:create_unique_node, :pl, :id, each[0],{
-		:name => each[0],
-		:description => each[1],
-		:num_repositories => each[2],
-		:influenced => each[3] == :NULL ? "" : each[3],
-		:logo => each[4] == :NULL ? "" : each[4],
-		:thumbnail => each[5] == :NULL ? "" : each[5]
-	}]
-	}
-	return neo.batch *commands
+	session = Neo4j::Session.open(:server_db)
+	nodes = []
+	CSV.foreach("./setup/programming_languages.csv") do |row| 
+		nodes << Neo4j::Node.create( {
+			:name => row[0],
+			:description => row[1],
+			:num_repositories => row[2],
+			:influenced => row[3] == :NULL ? "" : row[3],
+			:logo => row[4] == :NULL ? "" : row[4],
+			:thumbnail => row[5] == :NULL ? "" : row[5]
+		 } )
+	end
+	puts "Created #{nodes.size} nodes"
 end
 
-#This creates the relationships between each node
-def create_relationships
+# Creates the relationships between each node
+def create_relationships()
 	count = 0
-	CSV.foreach("./setup/programming_languages.csv") do |row|				
+	CSV.foreach("./setup/programming_languages.csv") do |row|
 		if row[3] != 'NULL'
-			first = Neography::Node.find(:pl, :id, row[0])
+			first = Neo4j::Session.query("MATCH (n) WHERE n.name = '#{row[0]}' RETURN n").first.n
 			for id in row[3].split('|')
-				second = Neography::Node.find(:pl, :id, id)
-				if !(second.nil? || second.empty?)
-					influences(first, second)
+				second = Neo4j::Session.query("MATCH (n) WHERE n.name = '#{id}' RETURN n").first.n
+				if !(second.nil?)
+					first.create_rel(:influeced, second)
 					count+= 1
 				end
 			end
 		end
 	end
-	return count
+	puts "Created #{count} relationships"
 end
 
-#deletes all existing nodes and their relationships
+# deletes all existing nodes and their relationships
 def clear_graph
-  neo = Neography::Rest.new
-	neo.execute_query("MATCH (n) OPTIONAL MATCH (n)-[r]-() DELETE n,r")
+	session = Neo4j::Session.open(:server_db)
+	session.query("MATCH (n) DETACH DELETE n")
+	puts "Cleared database of nodes"
 end
 
-#delete all existing nodes/relationships, create new nodes and their relationships
+# delete all existing nodes/relationships, create new nodes and their relationships
 begin
 	clear_graph
-	puts "Cleared database of nodes"
-	count = create_graph.count
-	puts "Created #{count} nodes"
-	count = create_relationships
-	puts "Created #{count} relationships"
+  create_graph
+  create_relationships	
 end

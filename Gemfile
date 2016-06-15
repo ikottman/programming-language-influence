@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 gem 'sinatra', '~> 1.4'
-gem 'neography', '~> 1.3'
 gem 'haml', '~> 4.0'
 gem 'json', '~> 1.8'
+gem 'neo4j', '= 7.0.11'
 
 
 group :test do
