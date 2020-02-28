@@ -71,7 +71,7 @@ GEM
       rack
     rack-test (0.6.1)
       rack (>= 1.0)
-    rake (11.2.2)
+    rake (13.0.1)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
