@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'sinatra', '~> 1.4'
 gem 'neography', '~> 1.8'
 gem 'haml', '~> 4.0'
-gem 'json', '~> 1.8'
+gem 'json', '~> 2.3'
 gem 'neo4j', '= 7.0.11'
 
 
