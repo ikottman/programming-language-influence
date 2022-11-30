@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'sinatra', '~> 1.4'
+gem 'sinatra', '~> 2.2'
 gem 'neography', '~> 1.8'
 gem 'haml', '~> 4.0'
 gem 'json', '~> 1.8'
